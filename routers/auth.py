@@ -125,7 +125,7 @@ async def logut( response:Response,request:Request, user_id : int = Depends(Sess
     response.delete_cookie(key="Session")
     response.delete_cookie(key="CSRF-Token")
 
-    return RedirectResponse(status_code=302, url="/")
+    return response
 
 async def Send_Email_Confirm(request: Request,userid: int,user_email : str,db : Session):
 
@@ -191,7 +191,7 @@ async def register(request: Request,background_tasks : BackgroundTasks,register_
         first_name= register_data.first_name,
         last_name = register_data.last_name,
         email = register_data.email,
-        password = bcrypt.hashpw(register_data.password.encode("utf8"), bcrypt.gensalt())
+        password = bcrypt.hashpw(register_data.password.encode("utf8"), bcrypt.gensalt()).decode("utf8")
     )
 
     db.add(user)
